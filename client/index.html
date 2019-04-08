@@ -52,8 +52,15 @@
 			        background: #B2B3D6;
 			    }
 
-			    .btn-success {
-			    	background: #6F9283;
+			    .btn-sq {
+					width: 37px !important;
+					height: 37px !important;
+					font-size: 24px;
+					padding: 0;
+			    }
+			    .inline-img {
+			    	max-width: 100%;
+			    	max-height: 100%;
 			    }
 		</style>
 	</head>
@@ -62,13 +69,17 @@
 			<source src="https://capnlee.co.uk/chat/chime.ogg" type="audio/ogg">
 		</audio>
 		<div class="container-fluid">
-			<div id="messages" class="pl-2 pr-2 shadow">
+			<div id="messages" class="shadow">
 				
 			</div>
 
             <div class="fixed-bottom p-3">
                 <div class="input-group pb-3">
-                    <input id="message" type="text" class="form-control input-sm shadow" placeholder="Type your message here..." />
+                	<form id="imgSubmit" method="post" enctype="multipart/form-data" action="https://capnlee.co.uk/chat/img">
+                		<label for="file" class="btn btn-secondary shadow btn-sq">📷</label>
+                		<input id="file" name="file" type="file" style="display:none;" accept="image/png, image/jpeg"/>
+                	</form>
+                    <input id="message" type="text" class="form-control input-sm shadow" placeholder="Type your message here or upload an image..." />
                     <span class="input-group-btn">
                         <button class="btn btn-success shadow" id="send" onclick="sendMessage()">
                             Send</button>

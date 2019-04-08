@@ -12,19 +12,24 @@ window.addEventListener('load', () => {
 
 	window.messageBox = document.getElementById('messages');
 	window.messageField = document.getElementById('message');
+	window.imageField = document.getElementById('file');
 	window.sendButton = document.getElementById('send');
 	window.notification = document.getElementById('notification');
+
+	window.imageField.onchange = () => {
+		window.messageField.value = window.imageField.value;
+	};
 
 	getMessages();
 });
 
-document.addEventListener('resize', () => {
+window.addEventListener('resize', () => {
 	if (window.mobileDevice) {
 		window.messageBox.scroll(0, window.messageBox.scrollHeight);
 	}
 });
 
-document.addEventListener('visibilitychange', () => {
+window.addEventListener('visibilitychange', () => {
 	if (document.hidden) {
 
 	}else{
@@ -33,7 +38,7 @@ document.addEventListener('visibilitychange', () => {
 	}
 });
 
-document.addEventListener('keydown', (event) => {
+window.addEventListener('keydown', (event) => {
 	if (event.code == 'Enter' && !event.shiftKey && window.sendButton.disabled === false) {
 		sendMessage();
 	}
@@ -65,13 +70,27 @@ function addMessage (msg) {
 		let inner = document.createElement('div');
 		inner.className = 'row';
 		let name = document.createElement('div');
-		name.className = 'col-md-12 pt-1 text-capitalize font-weight-bold';
+		name.className = 'col-md-12 pt-1 pl-2 text-capitalize font-weight-bold';
 		name.textContent = msg.name;
 		let body = document.createElement('div');
-		body.className = 'col-md-12';
-		body.textContent = msg.message;
+		if (msg.message === '${img}') {
+			body.className = 'pl-2';
+			body.style.width = '300px';
+			body.style.minHeight = '180px';
+			let link = document.createElement('a');
+			link.href = `https://capnlee.co.uk/chat/img/uploads/${msg.id}.png`; 
+			let img = document.createElement('img');
+			img.src = `https://capnlee.co.uk/chat/img/uploads/${msg.id}.png`;
+			img.className = 'inline-img';
+			link.appendChild(img);
+			body.appendChild(link);
+		} else {
+			body.className = 'col-md-12 pl-2';
+			body.textContent = msg.message;
+		}
+
 		let time = document.createElement('div');
-		time.className = 'col-md-12 pb-1 font-italic';
+		time.className = 'col-md-12 pl-2 pb-1 font-italic';
 		time.style.fontSize = '0.6em';
 		time.textContent = getTimeText(msg.timestamp);
 		inner.appendChild(name);
@@ -122,29 +141,40 @@ function deleteAllMessages () {
 }
 
 function sendMessage (){
-	if (window.messageField.value.length > 0) {
-		window.sendButton.disabled = true;
-		let msg = window.messageField.value.substring(0, 10000);
-		let async = new XMLHttpRequest();
-		async.open('POST', document.location.href + '/messages');
-		async.setRequestHeader('Content-Type', 'application/json');
-		async.onreadystatechange = () => {
-            if (async.readyState == 4) {
-                if (async.status == 200){
-                	window.sendButton.disabled = false;
-                    window.messageField.value = window.messageField.value.substring(10000);
-                }
-            }
-		}
-		async.ontimeout = () => {
-			window.sendButton.disabled = false;
-		};
-		async.onerror = () => {
-			window.sendButton.disabled = false;
-		};
-		async.send(JSON.stringify({message: msg}));
+	if (window.imageField.value.length > 0) {
+		sendImage();
+	} else if (window.messageField.value.length > 0) {
+		sendText();
 	}
- }
+}
+
+function sendImage () {
+	window.sendButton.disabled = true;
+	document.forms["imgSubmit"].submit();
+}
+
+function sendText () {
+	window.sendButton.disabled = true;
+	let msg = window.messageField.value.substring(0, 10000);
+	let async = new XMLHttpRequest();
+	async.open('POST', document.location.href + '/messages');
+	async.setRequestHeader('Content-Type', 'application/json');
+	async.onreadystatechange = () => {
+        if (async.readyState == 4) {
+            if (async.status == 200){
+            	window.sendButton.disabled = false;
+                window.messageField.value = window.messageField.value.substring(10000);
+            }
+        }
+	}
+	async.ontimeout = () => {
+		window.sendButton.disabled = false;
+	};
+	async.onerror = () => {
+		window.sendButton.disabled = false;
+	};
+	async.send(JSON.stringify({message: msg}));
+}
 
 function getMessages() {
 	let async = new XMLHttpRequest();
