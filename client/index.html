@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class="bg-light">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href="https://capnlee.co.uk/chat/img/chat.png">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="socket.io/socket.io.js"></script>
+		<script src="https://capnlee.co.uk/chat/chat-client.js"></script>
+
+		<style>
+				html body {
+					font-size: 0.95em;
+				}
+				.container-fluid {
+				    position: fixed;
+				    height: 100%;
+				    left: 0;
+				    top: 0;
+				}
+
+				.profilepic {
+					width: 50px;
+					height: 50px;
+					border-radius: 25px;
+					overflow: hidden;
+					margin: 5px 0 0 5px;
+					float: left;
+				}
+
+				.profilepic img {
+					max-width:100%;
+					max-height:100%;
+				}
+
+				#messages {
+					margin-top: 15px;
+					border-radius: .25rem;
+					overflow-x: hidden;
+					overflow-y: scroll;
+					max-height: calc(100% - 100px);
+				}
+			    .other{
+			        background: #A4BBCF;
+			    }
+			    .other:nth-child(2n) {
+			        background: #90ADC5;
+			    }
+			    .self{
+			        background: #C0C0DD;
+			    }
+			    .self:nth-child(2n) {
+			        background: #B2B3D6;
+			    }
+
+			    .btn-success {
+			    	background: #6F9283;
+			    }
+		</style>
+	</head>
+	<body class="bg-light">
+		<audio id="notification" style="display: none">
+			<source src="https://capnlee.co.uk/chat/chime.ogg" type="audio/ogg">
+		</audio>
+		<div class="container-fluid">
+			<div id="messages" class="pl-2 pr-2 shadow">
+				
+			</div>
+
+            <div class="fixed-bottom p-3">
+                <div class="input-group pb-3">
+                    <input id="message" type="text" class="form-control input-sm shadow" placeholder="Type your message here..." />
+                    <span class="input-group-btn">
+                        <button class="btn btn-success shadow" id="send" onclick="sendMessage()">
+                            Send</button>
+                    </span>
+                </div>
+            </div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "chatapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify server.js -o server.build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-basic-auth": "^1.1.6",
+    "http-auth": "^3.2.3",
+    "knex": "^0.16.3",
+    "mysql": "^2.16.0",
+    "socketio": "^1.0.0"
+  }
+}
