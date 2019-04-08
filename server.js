@@ -8,6 +8,8 @@ const path = require('path');
 const sqlConfig = require('./dbConfig.js');
 const knex = require('knex')(sqlConfig);
 const bodyParser = require('body-parser');
+const multer = require("multer");
+const fs = require("fs");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -52,5 +54,19 @@ app.post('/messages', (req, res) => {
 	knex('messages').insert({name: req.auth.user, message: req.body.message}).then((result) => {
 		io.emit('message', {messages: [{name: req.auth.user, message: req.body.message}]});
 		res.sendStatus(200);
+	});
+});
+
+const upload = multer({dest: "/var/www/html/chat/temp"}); //outside of served folders
+ 
+app.post('/img', upload.single('file'), (req, res) => {
+	knex('messages').insert({name: req.auth.user, message: '${img}'}).returning('id').then((id) => {
+	    const tempPath = req.file.path;
+	    const targetPath = path.join(__dirname, `/client/img/uploads/${id}.png`);
+ 
+		fs.rename(tempPath, targetPath, (err) => {
+			console.log(err);
+			res.redirect('.');
+		});
 	});
 });
