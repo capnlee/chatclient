@@ -125,11 +125,11 @@ function getTimeText (time) {
 	}else if (daysAgo < 2) {
 		returnString += 'yesterday';
 	}else if (daysAgo < 7) {
-		returnString += (daysAgo-1) + ' days ago'
+		returnString += (daysAgo+1) + ' days ago'
 	}else if (daysAgo < 14) {
 		returnString += 'a week ago';
 	}else{
-		returnString += Math.round((daysAgo-1)/7) + ' weeks ago';
+		returnString += Math.round((daysAgo+1)/7) + ' weeks ago';
 	}
 	return returnString;
 }
