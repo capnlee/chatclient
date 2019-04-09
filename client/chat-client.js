@@ -25,7 +25,7 @@ window.addEventListener('load', () => {
 
 window.addEventListener('resize', () => {
 	if (window.mobileDevice) {
-		window.messageBox.scroll(0, window.messageBox.scrollHeight);
+		scrollToBottom();
 	}
 });
 
@@ -43,6 +43,12 @@ window.addEventListener('keydown', (event) => {
 		sendMessage();
 	}
 });
+
+// we set this to *2 because this tends to happen before the images have
+// started loading so it wasn't quite working as well as we hoped
+function scrollToBottom () {
+	window.messageBox.scroll(0, window.messageBox.scrollHeight * 2);
+}
 
 // https://stackoverflow.com/questions/260857/changing-website-favicon-dynamically
 function setFavicon (icon) {
@@ -98,7 +104,7 @@ function addMessage (msg) {
 		inner.appendChild(time);
 		box.appendChild(inner);
 		window.messageBox.appendChild(box);
-		window.messageBox.scroll(0, window.messageBox.scrollHeight);
+		scrollToBottom();
 
 		if (document.hidden && window.username !== msg.name) {
 			window.notification.play();
@@ -129,7 +135,7 @@ function getTimeText (time) {
 	}else if (daysAgo < 14) {
 		returnString += 'a week ago';
 	}else{
-		returnString += Math.round((daysAgo)/7) + ' weeks ago';
+		returnString += Math.round(daysAgo/7) + ' weeks ago';
 	}
 	return returnString;
 }
