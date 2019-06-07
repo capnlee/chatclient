@@ -93,6 +93,8 @@ function addMessage (msg) {
 		} else {
 			body.className = 'col-md-12 pl-2';
 			body.textContent = msg.message;
+		// now that we've cleaned any html formatting we're good to play with innerHTML
+			body.innerHTML = body.innerHTML.replace(/((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/g, '<a href="$1" target="_blank">$1</a>');
 		}
 
 		let time = document.createElement('div');
